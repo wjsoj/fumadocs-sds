@@ -81,19 +81,14 @@ export default function IaaaLoginPage() {
     localStorage.setItem('anti_phishing_test_completed', 'true')
     
     // 如果输入的是学号格式，进行校验
-    if (/^\d+$/.test(username)) {
-      if (validateStudentId(username)) {
-        // 学号格式正确，跳转到安全提醒页面
-        window.location.href = 'https://iaaa.pkuits.com/static/warning-page-v2/'
-        return
-      } else {
-        setError('学号格式不正确')
-        return
-      }
+    if (validateStudentId(username)) {
+      // 学号格式正确，跳转到安全提醒页面
+      window.location.href = 'https://iaaa.pkuits.com/static/warning-page-v2/'
+      return
+    } else {
+      setError('学号格式不正确')
+      return
     }
-    
-    // 如果不是学号格式（邮箱、手机号等），也跳转到安全提醒页面
-    window.location.href = 'https://iaaa.pkuits.com/static/warning-page-v2/'
   }
 
   const handleInputChange = (field: 'username' | 'password', value: string) => {
