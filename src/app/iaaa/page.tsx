@@ -50,6 +50,26 @@ export default function IaaaLoginPage() {
     return true
   }
 
+  // 验证邮箱格式的函数
+  const validateEmail = (email: string): boolean => {
+    // 基本邮箱格式验证
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return false
+    }
+    
+    // 检查是否以pku.edu.cn结尾（包括子域名）
+    const domain = email.split('@')[1].toLowerCase()
+    return domain === 'pku.edu.cn' || domain.endsWith('.pku.edu.cn')
+  }
+
+  // 验证手机号格式的函数
+  const validatePhone = (phone: string): boolean => {
+    // 中国大陆手机号验证：11位数字，以1开头，第二位是3-9
+    const phoneRegex = /^1[3-9]\d{9}$/
+    return phoneRegex.test(phone)
+  }
+
   // 处理键盘事件
   const handleKeyDown = (e: React.KeyboardEvent, nextField?: string) => {
     if (e.key === 'Enter') {
@@ -80,14 +100,41 @@ export default function IaaaLoginPage() {
     // 标记反钓鱼测试已完成
     localStorage.setItem('anti_phishing_test_completed', 'true')
     
-    // 如果输入的是学号格式，进行校验
-    if (validateStudentId(username)) {
-      // 学号格式正确，跳转到安全提醒页面
-      window.location.href = 'https://iaaa.pkuits.com/static/warning-page-v2/'
-      return
+    // 判断输入类型并进行相应验证
+    let isValid = false
+    let errorMessage = ''
+    
+    if (/^\d{10}$/.test(username)) {
+      // 10位数字，按学号验证
+      if (validateStudentId(username)) {
+        isValid = true
+      } else {
+        errorMessage = '学号格式不正确（入校年：22-25，发证单位：01-17）'
+      }
+    } else if (username.includes('@')) {
+      // 包含@符号，按邮箱验证
+      if (validateEmail(username)) {
+        isValid = true
+      } else {
+        errorMessage = '请使用北京大学邮箱（xxx@pku.edu.cn 或 xxx@stu.pku.edu.cn 等）'
+      }
+    } else if (/^\d+$/.test(username)) {
+      // 纯数字但不是10位，按手机号验证
+      if (validatePhone(username)) {
+        isValid = true
+      } else {
+        errorMessage = '手机号格式不正确（请输入11位中国大陆手机号）'
+      }
     } else {
-      setError('学号格式不正确')
-      return
+      // 其他格式
+      errorMessage = '请输入有效的学号、北大邮箱或手机号'
+    }
+    
+    if (isValid) {
+      // 验证通过，跳转到安全提醒页面
+      window.location.href = 'https://iaaa.pkuits.com/static/warning-page-v2/'
+    } else {
+      setError(errorMessage)
     }
   }
 
@@ -220,16 +267,6 @@ export default function IaaaLoginPage() {
             padding: 20px;
           }
           
-          .lx_info {
-            text-align: center;
-          }
-          
-          .lx_info span {
-            display: inline-block;
-            margin: 0 10px;
-            white-space: nowrap;
-          }
-          
           /* 顶部logo样式 */
           .top {
             padding: 20px 0;
@@ -252,15 +289,15 @@ export default function IaaaLoginPage() {
             }
             
             .lx_info {
-              display: flex;
-              flex-direction: column;
+              display: flex !important;
+              flex-direction: column !important;
               gap: 8px;
               align-items: center;
             }
             
             .lx_info span {
-              display: block;
-              margin: 0;
+              display: block !important;
+              margin: 0 !important;
               text-align: center;
               font-size: 14px;
               line-height: 1.4;
@@ -522,7 +559,7 @@ export default function IaaaLoginPage() {
         </div>
         
         <div className="bottom">
-          <div className="lx_info">
+          <div className="lx_info flex lg:flex-row flex-col">
             <span>服务热线：010-62751023</span>
             <span>Email：<a href="mailto:its@pku.edu.cn">its@pku.edu.cn</a></span>
             <span>© <a href="http://cc.pku.edu.cn/">北京大学计算中心</a></span>
