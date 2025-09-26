@@ -215,14 +215,99 @@ export default function IaaaLoginPage() {
         }
         
         /* 复选框样式 */
-        #remember_text {
-          cursor: pointer;
-          user-select: none;
-        }
-        
-        .ext-webkit.ext-chrome.ext-mac {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+          #remember_text {
+            cursor: pointer;
+            user-select: none;
+          }
+          
+          /* 底部信息样式优化 */
+          .bottom {
+            padding: 20px;
+          }
+          
+          .lx_info {
+            text-align: center;
+          }
+          
+          .lx_info span {
+            display: inline-block;
+            margin: 0 10px;
+            white-space: nowrap;
+          }
+          
+          /* 顶部logo样式 */
+          .top {
+            padding: 20px 0;
+          }
+          
+          .top a {
+            display: inline-block;
+          }
+          
+          /* 移动端响应式样式 */
+          @media (max-width: 768px) {
+            .top {
+              text-align: center;
+              padding: 15px 0;
+            }
+            
+            .top img {
+              max-width: 200px;
+              height: auto;
+            }
+            
+            .lx_info {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              align-items: center;
+            }
+            
+            .lx_info span {
+              display: block;
+              margin: 0;
+              text-align: center;
+              font-size: 14px;
+              line-height: 1.4;
+            }
+            
+            .single_col_panel {
+              margin: 10px;
+              padding: 20px 15px;
+            }
+            
+            .input-txt-row, .input-btn-row {
+              font-size: 16px; /* 防止移动端缩放 */
+            }
+          }
+          
+          @media (max-width: 480px) {
+            .top {
+              padding: 10px 0;
+            }
+            
+            .top img {
+              max-width: 160px;
+              height: auto;
+            }
+            
+            .lx_info span {
+              font-size: 12px;
+            }
+            
+            .bottom {
+              padding: 15px 10px;
+            }
+            
+            .single_col_panel {
+              margin: 5px;
+              padding: 15px 10px;
+            }
+          }
+          
+          .ext-webkit.ext-chrome.ext-mac {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          }
       `}</style>
       
       <div className="main">
