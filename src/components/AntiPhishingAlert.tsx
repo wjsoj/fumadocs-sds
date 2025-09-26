@@ -61,7 +61,7 @@ export function AntiPhishingAlert() {
   const handleCloseAttempt = (open: boolean) => {
     if (!open) {
       // 用户尝试关闭弹窗，显示警告
-      const shouldClose = confirm('您确定要跳过网络安全测试吗？')
+      const shouldClose = confirm('您确定要跳过身份验证吗？')
       if (shouldClose) {
         handleSkip()
       }
