@@ -1,13 +1,15 @@
 ---
-title: Hello World
-description: Your first document
+title: Overview
+description: Overview
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
-
-## What is Next?
+import { getPageTreePeers } from 'fumadocs-core/server';
+import { source } from '@/lib/source';
 
 <Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.vercel.app" />
+  {getPageTreePeers(source.pageTree, '/docs/doc').map((peer) => (
+    <Card key={peer.url} title={peer.name} href={peer.url}>
+      {peer.description}
+    </Card>
+  ))}
 </Cards>
