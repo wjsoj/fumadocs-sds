@@ -9,6 +9,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { getMDXComponents } from '@/mdx-components';
+import { ProgressProvider } from '@/lib/progress-context';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -17,18 +18,31 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   const MDXContent = page.data.body;
 
+  // 只为特定的页面添加 ProgressProvider
+  const isProgressPage = params.slug?.join('/') === 'quiz/checktodo';
+  
+  const content = (
+    <DocsBody>
+      <MDXContent
+        components={getMDXComponents({
+          // this allows you to link to other pages with relative file paths
+          a: createRelativeLink(source, page),
+        })}
+      />
+    </DocsBody>
+  );
+
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody>
-        <MDXContent
-          components={getMDXComponents({
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-          })}
-        />
-      </DocsBody>
+      {isProgressPage ? (
+        <ProgressProvider>
+          {content}
+        </ProgressProvider>
+      ) : (
+        content
+      )}
     </DocsPage>
   );
 }

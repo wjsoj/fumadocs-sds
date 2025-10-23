@@ -2,10 +2,24 @@
 import { createClient } from '@supabase/supabase-js'
 
 // 公共客户端（用于前端和匿名操作）
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+// 使用标准命名：NEXT_PUBLIC_SUPABASE_ANON_KEY（与官方文档一致），兼容旧命名
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    'Supabase env missing: set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY (preferred). Legacy NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is also supported.'
+  )
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  realtime: {
+    params: {
+      eventsPerSecond: 10,
+    },
+  },
+})
 
 // 管理客户端（用于后端服务角色操作）
 const supabaseServiceKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY
@@ -47,4 +61,13 @@ export interface SubmitSurveyData {
   deviceFingerprint: string
   deviceInfo: DeviceInfo
   answers: Record<string, any>
+}
+
+export interface ApiKey {
+  id: number
+  student_id: string
+  name: string
+  api_key: string
+  created_at: string
+  updated_at: string
 }

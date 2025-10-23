@@ -1,12 +1,13 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { StatsCard } from '@/components/admin/StatsCard'
 import { DeviceDataTable } from '@/components/admin/DeviceDataTable'
+import Link from 'next/link'
 import { 
   Lock, 
   LogOut, 
@@ -30,6 +31,19 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>('')
 
+  // 从 localStorage 恢复登录态
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('admin_token')
+      if (saved) {
+        setToken(saved)
+        setIsLoggedIn(true)
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
+
   // 管理员登录
   const handleLogin = async () => {
     setLoading(true)
@@ -50,6 +64,11 @@ export default function AdminPanel() {
         setToken(result.token)
         setIsLoggedIn(true)
         setPassword('')
+        try {
+          localStorage.setItem('admin_token', result.token)
+        } catch {
+          // ignore
+        }
       } else {
         setError(result.error || '登录失败')
       }
@@ -97,6 +116,11 @@ export default function AdminPanel() {
     setToken('')
     setResults(null)
     setError('')
+    try {
+      localStorage.removeItem('admin_token')
+    } catch {
+      // ignore
+    }
   }
 
   if (!isLoggedIn) {
@@ -205,6 +229,22 @@ export default function AdminPanel() {
             <LogOut className="w-4 h-4 lg:w-3 lg:h-3" />
             <span className="lg:text-xs">退出登录</span>
           </Button>
+        </div>
+
+        {/* 实时进度统计入口 */}
+        <div className="mb-8 lg:mb-6">
+          <div className="flex items-center mb-4 lg:mb-3">
+            <div className="flex items-center justify-center w-10 h-10 lg:w-8 lg:h-8 bg-primary/10 text-primary rounded-lg mr-3 lg:mr-2">
+              <BarChart3 className="w-5 h-5 lg:w-4 lg:h-4" />
+            </div>
+            <h2 className="text-xl lg:text-lg font-semibold text-foreground">实时进度统计（CheckTodo）</h2>
+          </div>
+          <div className="flex items-center justify-between bg-card border rounded-lg p-4 lg:p-3">
+            <p className="text-sm lg:text-xs text-muted-foreground">查看学员实时在线与步骤完成进度</p>
+            <Button asChild size="sm" className="lg:h-8 lg:px-3 lg:text-xs">
+              <Link href="/admin/progress">进入实时统计</Link>
+            </Button>
+          </div>
         </div>
 
         {/* 查询表单 */}

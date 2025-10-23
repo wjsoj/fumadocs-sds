@@ -1,0 +1,101 @@
+---
+title: Vibe Coding实践指南
+description: 用AI做一些有趣的事情
+---
+
+import { ProgressStepButton } from '@/components/progress/ProgressStepButton'
+import { RealConnectionStatus } from '@/components/progress/RealConnectionStatus'
+import ApiKeyFetcher from '@/components/ApiKeyFetcher'
+
+# 📋 实践步骤
+
+<div className="mb-6">
+  <RealConnectionStatus />
+</div>
+
+本节课我们将动手实践Vibe Coding的编程模式，在此之前需要先配置好开发环境，在下面的教程中我们推荐使用VSCode + Cline接入自己的api_key的方式，接入各种大模型来辅助开发，推荐理由是VSCode拥有非常丰富的插件生态，而Cline则是AI编程的开源利器，能够在一个入口集成各种丰富多样的大模型、MCP工具等能力。
+
+如果你已经掌握了Vibe Coding的理念，并在实际开发过程中已经体验过Github Copilot、Cursor、Trae IDE、Claude Code等目前领先的开发工具，你可以跳过这部分，前往文末的Python生态应用推荐部分根据自己的兴趣自由探索，尝试用AI辅助编程来完成一个小项目。
+
+<Callout title="进度确认">
+  我们使用Supabase Realtime API实现了实时进度同步功能，你可以在页面上方检查连接状态。在每一个步骤执行完成后，你可以点击“我已配置好XXX”来更新进度
+</Callout>
+
+
+## 基础环境配置
+
+### 步骤 1: 下载安装Python
+
+前往[Python官网](https://www.python.org/)下载并安装Python
+
+<ProgressStepButton stepNumber={1} label="我已配置好Python！" />
+
+### 步骤 2: 下载安装VSCode
+
+前往[VSCode官网](https://code.visualstudio.com/)下载并安装VSCode（Visual Studio Code）
+
+<ProgressStepButton stepNumber={2} label="我已配置好VSCode！" />
+
+### 步骤 3: 安装Cline插件
+
+在VSCode中，打开侧边的扩展商店（Extensions），搜索并安装Cline插件。
+
+<ProgressStepButton stepNumber={3} label="我已安装好Cline插件！" />
+
+### 步骤 4: 下载并安装NodeJS
+
+NodeJS是一个JavaScript运行时，即使不开发前端项目，使用一些MCP工具还是需要它的支持。前往[NodeJS官网](https://nodejs.org/)下载并安装NodeJS。
+
+<ProgressStepButton stepNumber={4} label="我已安装好NodeJS！" />
+
+<Callout type="warning" title="加速国内下载">
+  nodejs和python都有丰富的生态，直接使用开源的包和库能够大大提升开发效率。如果你在国内下载这些工具时遇到网络问题，可以考虑使用国内的镜像源，我们推荐Python使用由[北京大学开源镜像站](https://mirrors.pku.edu.cn/)维护的镜像源，NodeJS可以使用[阿里镜像源](https://npmmirror.com/)。
+
+  具体而言，你可以通过下面的代码在终端/PowerShell中配置镜像源：
+
+  ```bash
+  # 配置Python镜像源
+  pip config set global.index-url https://mirrors.pku.edu.cn/pypi/web/simple
+
+  # 配置NodeJS镜像源
+  npm config set registry https://registry.npmmirror.com
+  ```
+</Callout>
+
+## 配置Cline插件
+
+### 步骤 5: 获取API Key
+
+使用下方的表单输入你的学号和姓名，获取专属的 API Key 用于配置 Cline 插件，该API KEY内含10美元额度，可用于在Cline中调用大模型服务
+
+<ApiKeyFetcher />
+
+然后在Cline的模型配置中使用`OpenAI Compatible` Provider，并将获取到的 API Key 填入对应的输入框中，Base URL填写`https://yunwu.ai/v1`，`Model ID`填写`gpt-5-chat-latest`
+
+<img src="https://img-api.pku3d.com/ota/admin/CjteMioZ.png" alt="admin/CjteMioZ.png" className="md:w-1/2" />
+
+<ProgressStepButton stepNumber={5} label="我已配置好API Key！" />
+
+### 步骤 6:安装MCP插件——Context7
+
+点击Cline右上角第二个按钮，打开MCP Servers插件市场，安装插件Context7
+
+<Callout title="这是什么？">
+  AI一个很大的问题在于无法获取最新的技术趋势以及技术文档信息，Context7 MCP服务器内嵌了很多最新的技术文档，以方便LLM理解的方式呈现，能够帮助AI更好地理解和生成符合指定技术框架要求的代码
+</Callout>
+
+<Callout type="warning" title="安装提示">
+  如果你在安装过程中遇到要求提供Context7 API Key的提示，可以让AI忽略。对于我们的大多数任务，Context7插件的免费额度已经足够使用
+</Callout>
+
+<ProgressStepButton stepNumber={6} label="我已安装好Context7！" />
+
+## 🚀 开始Vibe Coding
+
+
+## 🔧 一些用Python实现GUI的工具推荐
+
+- [flet](https://flet.dev/) 跨平台 flutter风格UI
+- [streamlit](https://streamlit.io/) 数据应用快速开发
+- [gradio](https://gradio.app/) AI相关Web UI快速搭建
+- [chainlit](https://chainlit.io/) LLM应用快速开发
