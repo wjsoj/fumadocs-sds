@@ -16,12 +16,15 @@ interface ProgressContextType {
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined)
 
-export function ProgressProvider({ children }: { children: React.ReactNode }) {
+export function ProgressProvider({ children, totalSteps: totalStepsProp }: { children: React.ReactNode; totalSteps?: number }) {
   const [isConnected, setIsConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(true)
   const [currentSession, setCurrentSession] = useState<string | null>(null)
   const [deviceFingerprint, setDeviceFingerprint] = useState<string | null>(null)
   const [progress, setProgress] = useState<ProgressTracking | null>(null)
+  // 默认的总步骤数（如果未通过 Provider 传入，则使用 5）
+  const defaultTotalSteps = 5
+  const resolvedTotalSteps = typeof totalStepsProp === 'number' && totalStepsProp > 0 ? totalStepsProp : defaultTotalSteps
 
   const generateDeviceFingerprint = useCallback(async () => {
     try {
@@ -154,6 +157,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
+      // 优先使用 Provider 传入的 totalSteps，其次使用数据库中已有的，最后回退到默认值
+      const totalStepsToUse = progress?.total_steps ?? resolvedTotalSteps
       // 如果 stepNumber 为 0，表示取消所有进度（或者可以保留当前最大值-1的逻辑）
       // 这里简单实现：stepNumber=0 时重置为 0
       const { data, error } = await supabase
@@ -163,7 +168,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           device_fingerprint: deviceFingerprint,
           user_agent: navigator.userAgent,
           current_step: stepNumber,
-          total_steps: 5, // 根据你的实际步骤数设置
+          total_steps: totalStepsToUse, // 可配置的总步骤数
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'session_id,device_fingerprint'
@@ -183,7 +188,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       console.error('Error in markStepComplete:', error)
       throw error
     }
-  }, [currentSession, deviceFingerprint])
+  }, [currentSession, deviceFingerprint, progress, resolvedTotalSteps])
 
   const resetProgress = useCallback(async () => {
     if (!currentSession || !deviceFingerprint) return

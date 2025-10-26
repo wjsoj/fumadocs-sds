@@ -37,7 +37,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       {isProgressPage ? (
-        <ProgressProvider>
+        <ProgressProvider totalSteps={7}>
           {content}
         </ProgressProvider>
       ) : (
