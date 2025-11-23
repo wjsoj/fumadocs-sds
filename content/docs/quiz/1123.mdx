@@ -1,0 +1,585 @@
+---
+title: "2025-11-23 OJ题解"
+description: "上机课OJ题目题解和代码示例"
+---
+
+## 醉酒的狱卒
+
+[题目链接](http://10.129.81.88:8848/problem/13)
+
+这是一个经典开关灯问题的变体：
+
+> 假设有 N 盏灯（N 为不大于 5000 的正整数），从 1 到 N 按顺序依次编号，初始时全部处于开启状态；第一个人（1号）将灯全部关闭，第二个人（2 号）将编号为 2 的倍数的灯打开，第三个人（3 号）将编号为 3 的倍数的灯做相反处理（即，将打开的灯关闭，将关闭的灯打开）。依照编号递增顺序，以后的人都和 3号一样，将凡是自己编号倍数的灯做相反处理。问当第 N 个人操作完之后，有哪些灯是关闭着的？
+
+如果尝试模拟一遍这个过程，容易发现最后留下的状态反转（关闭）的灯的编号都是完全平方数（1,4,9,16,...），因为只有完全平方数才有奇数个因数，而按动偶数次下相当于没按。
+
+同理，在本题中最终只有编号为完全平方数的牢房的状态会被反转为打开状态，因此我们只需要计算出不超过 N 的完全平方数的个数即可。
+
+简单的方法是直接计算 $ \sqrt{"n"} $ 向下取整即可。
+
+<Tabs groupId="language" items={['Python', 'C/C++']} persist>
+  <Tab value="Python">
+  ```python
+  T = int(input())
+  # 下划线作为变量名明确表示该变量不会被使用
+  for _ in range(T): # [!code highlight]
+      n = int(input())
+      print(int(n**0.5))
+  ```
+  </Tab>
+  <Tab value="C/C++">
+  ```c
+  #include <stdio.h>
+  #include <math.h>
+
+  int main() {
+      int T;
+      scanf("%d", &T);
+      
+      for (int i = 0; i < T; i++) {
+          int n;
+          scanf("%d", &n);
+          
+          double sqrt_result = sqrt(n);
+          int result = (int)sqrt_result;
+          printf("%d\n", result);
+      }
+      
+      return 0;
+  }
+  ```
+  </Tab>
+</Tabs>
+
+## 好卷
+
+[题目链接](http://10.129.81.88:8848/problem/11)
+
+题目的难点在于矩阵的读入和处理，对于超出原始图片的部分，由于0乘以任何数都为0，因此较优的做法是直接忽略。
+
+正因为我们选择直接忽略超出部分，因此在计算卷积和时需要对目标输出图片的像素点进行循环，计算得到原始图片的对应坐标，再判断当前坐标是否在原始图片内。
+
+<Tabs groupId="language" items={['Python', 'C/C++']} persist>
+<Tab value="Python">
+```python
+N1,M1,N2,M2 = map(int, input().split())
+image = [[int(x) for x in input().split()] for _ in range(N1)]
+kernel = [[int(x) for x in input().split()] for _ in range(N2)]
+
+# Same模式下的卷积运算
+output = [[0] * M1 for _ in range(N1)]
+
+# 下面这一行是错误的
+# output = [[0] * M1] * N1 # [!code --]
+
+# output[i][j] = 以它为中心的卷积核 在 原图上相乘再求和 的结果
+for i in range(N1):
+    for j in range(M1):
+        sum_val = 0
+        # kernel[dx][dy] 应该和 image[i + ?][j + ?] 相乘
+        for dx in range(N2):
+            for dy in range(M2):
+                # 因为dx,dy是相对于卷积核左上角的偏移量 从0开始计数
+                # 因此需要减去 N2//2, M2//2 来得到对应原始图片左上角的坐标
+                # 然后再加上 dx, dy 来得到对应的原始图片坐标
+                x = (i - N2 // 2) + dx
+                y = (j - M2 // 2) + dy
+                if 0 <= x < N1 and 0 <= y < M1:
+                    sum_val += image[x][y] * kernel[dx][dy]
+        output[i][j] = sum_val
+
+for row in output:
+    # print(*row) # 这和下面一行是等价的
+    print(" ".join(map(str, row)))
+```
+</Tab>
+<Tab value="C/C++">
+```c
+#include <stdio.h>
+
+#define MAX_SIZE 105  // 根据实际情况调整最大尺寸
+
+int main() {
+    int N1, M1, N2, M2;
+    scanf("%d %d %d %d", &N1, &M1, &N2, &M2);
+    
+    // 读取图像矩阵
+    int image[MAX_SIZE][MAX_SIZE];
+    for (int i = 0; i < N1; i++) {
+        for (int j = 0; j < M1; j++) {
+            scanf("%d", &image[i][j]);
+        }
+    }
+    
+    // 读取卷积核矩阵
+    int kernel[MAX_SIZE][MAX_SIZE];
+    for (int i = 0; i < N2; i++) {
+        for (int j = 0; j < M2; j++) {
+            scanf("%d", &kernel[i][j]);
+        }
+    }
+    
+    // Same模式下的卷积运算
+    int output[MAX_SIZE][MAX_SIZE] = {0};
+
+    // output[i][j] = 以它为中心的卷积核 在 原图上相乘再求和 的结果
+    for (int i = 0; i < N1; i++) {
+        for (int j = 0; j < M1; j++) {
+            int sum_val = 0;
+            // kernel[dx][dy] 应该和 image[i + ?][j + ?] 相乘
+            for (int dx = 0; dx < N2; dx++) {
+                for (int dy = 0; dy < M2; dy++) {
+                    // 因为dx,dy是相对于卷积核左上角的偏移量 从0开始计数
+                    // 因此需要减去 N2//2, M2//2 来得到对应原始图片左上角的坐标
+                    // 然后再加上 dx, dy 来得到对应的原始图片坐标
+                    int x = (i - N2 / 2) + dx;
+                    int y = (j - M2 / 2) + dy;
+                    if (0 <= x && x < N1 && 0 <= y && y < M1) {
+                        sum_val += image[x][y] * kernel[dx][dy];
+                    }
+                }
+            }
+            output[i][j] = sum_val;
+        }
+    }
+    
+    for (int i = 0; i < N1; i++) {
+        for (int j = 0; j < M1; j++) {
+            printf("%d", output[i][j]);
+            if (j < M1 - 1) {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
+```
+</Tab>
+</Tabs>
+
+## 买水果
+
+[题目链接](http://10.129.81.88:8848/problem/14)
+
+中译中理解：
+
+1. 店主可以决定每一种水果的定价，同一种水果的价格必须相同。
+2. 顾客购买的水果以名称形式呈现，每个顾客会购买若干种水果，每种水果可以买多份，体现为重复的水果名称。
+3. 顾客购买的水果种类小于等于店家拥有的水果种类，且认为卖家库存无限。
+4. 在以上假设基础下，如果各种类的水果定价未知，顾客可能支付的最低/最高金额分别是多少？
+
+贪心思想：
+
+**在计算最低金额时，我们应当将顾客购买数量最多的水果定价为最低价，依次类推。同理，在计算最高金额时，我们应当将顾客购买数量最多的水果定价为最高价，依次类推。**
+
+<Tabs groupId="language" items={['Python', 'C/C++']} persist>
+<Tab value="Python">
+```python
+n,m = map(int, input().split())
+prices = [int(x) for x in input().split()]
+kinds = [input() for _ in range(m)]
+
+# 统计每种水果的购买数量
+kind_dict = {}
+for i in range(m):
+    if kinds[i] not in kind_dict:
+        kind_dict[kinds[i]] = 1
+    else:
+        kind_dict[kinds[i]] += 1
+# 排序
+# 单一种类水果个数从大到小排序
+# 实际上水果的名字和我们的答案无关，所以只需要按照购买个数排序即可
+sorted_kinds = sorted(kind_dict.values(), reverse=True)
+# 价格从小到大排序
+price = sorted(prices)
+
+# 贪心 种类中个数最多的最优先选
+min_cost = 0
+max_cost = 0
+
+for i in range(len(sorted_kinds)):
+    # 最小花费：种类中个数最多的选最便宜的
+    min_cost += sorted_kinds[i] * price[i]
+    # 最大花费：种类中个数最多的选最贵的
+    max_cost += sorted_kinds[i] * price[len(price) - 1 - i]
+
+# 输出：最好情况下的最小花费 以及 最坏情况下的最大花费
+print(min_cost, max_cost)
+```
+</Tab>
+<Tab value="C/C++">
+
+由于自己实现排序算法函数比较麻烦 使用C++的`algorithm`库中的sort函数来简化代码，还可以进一步使用STL容器vector和map来简化代码逻辑：
+
+```c++
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cstring>
+
+using namespace std;
+
+// 比较函数用于降序排序
+bool desc(int a, int b) {
+    return a > b;
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    
+    int prices[100];
+    for (int i = 0; i < n; i++) {
+        cin >> prices[i];
+    }
+    
+    // 排序价格（升序）
+    sort(prices, prices + n);
+    
+    // 手动统计水果次数
+    string fruits[100];
+    int counts[100] = {0};
+    int kind_count = 0;
+    
+    for (int i = 0; i < m; i++) {
+        string name;
+        cin >> name;
+        
+        bool found = false;
+        for (int j = 0; j < kind_count; j++) {
+            if (fruits[j] == name) {
+                counts[j]++;
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            fruits[kind_count] = name;
+            counts[kind_count] = 1;
+            kind_count++;
+        }
+    }
+    
+    // 对次数降序排序
+    sort(counts, counts + kind_count, desc);
+    
+    // 计算最小总价：价格升序 × 次数降序
+    int min_total = 0;
+    for (int i = 0; i < kind_count; i++) {
+        min_total += prices[i] * counts[i];
+    }
+    
+    // 计算最大总价：价格降序的前k个 × 次数降序
+    int max_total = 0;
+    for (int i = 0; i < kind_count; i++) {
+        max_total += prices[n - 1 - i] * counts[i];
+    }
+    
+    cout << min_total << " " << max_total << endl;
+    
+    return 0;
+}
+```
+</Tab>
+</Tabs>
+
+## 幂次方
+
+[题目链接](http://10.129.81.88:8848/problem/15)
+
+题目具有典型的能够通过递归/迭代的方式进行分治的特性：
+
+- 具有相似的子问题
+- 子问题之间相互独立
+- 存在边界条件
+
+因此我们可以采用递归方法来解决该问题：
+
+<Tabs groupId="language" items={['Python', 'C/C++']} persist>
+<Tab value="Python">
+```python
+n = int(input())
+
+# 找到刚好比n小的2的最大幂次
+# 1<<n = 2^n
+max_power = 0
+while (1 << max_power) <= n:
+    max_power += 1
+max_power -= 1
+
+# 递归解法
+def solve(n):
+    power = max_power
+    while power >= 0:
+        if (1 << power) <= n:
+            # 递归边界条件
+            if power == 0:
+                print("2(0)", end="")
+            elif power == 1:
+                print("2", end="")
+            else:
+                print("2(", end="")
+                # 继续递归
+                solve(power)
+                print(")", end="")
+            n -= (1 << power)
+            if n > 0:
+                print("+", end="")
+        power -= 1
+    return
+    
+solve(n)
+```
+</Tab>
+<Tab value="C/C++">
+```c++
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void solve(int x) {
+    for (int i = 14; i >= 0; i--)  // 两万的数据最多是2^14
+    {
+        if (pow(2, i) <= x) {
+            // pow(n, m)在cmath库中，返回n^m；枚举出第一个幂次方
+            if (i == 1) {
+                cout << "2";  // 2^1不用再往后分解了且2^1输出为2，单独出来
+            } else if (i == 0) {
+                cout << "2(0)";  // 2^0也不用再往后分解了，单独出来
+            } else {  // 若i>1则继续分解指数i
+                cout << "2(";
+                solve(i);
+                cout << ")";
+            }
+            
+            x -= pow(2, i);  // 继续循环分解余下的
+            if (x != 0) {
+                cout << "+";
+                // 加号处理的最简单方法：若此x还没分解完，则后面还有项，所以输出一个+号
+            }
+        }
+    }
+}
+
+int main() {
+    int a;
+    cin >> a;
+    solve(a);
+    return 0;
+}
+```
+</Tab>
+</Tabs>
+
+## 税收与补贴
+
+[题目链接](http://10.129.81.88:8848/problem/12)
+
+题目题干较为复杂，需要进行一番中译中：
+
+1. 商家不可能以低于成本价的价格出售商品。
+2. 当价格高到一定程度时，增加价格必然会导致销量下降。
+3. 商家需要在价格和销量间进行权衡，找到一个**最大总利润**的价格点。
+4. 政府能够通过税收和补贴来影响需求曲线，进而影响商家的定价策略，从而实现调控市场的目的。
+5. 政府对该商品有一个预期价格。
+6. 我们的目标是通过税收和补贴，使得商家在新的需求曲线下选择的最优定价点就是政府的预期价格。
+
+核心：商家会选择总利润最大的价格进行出售，政府有一个预期价格，我们希望通过税收和补贴来影响需求曲线，使得商家选择的价格就是政府的预期价格，问应该采取怎样的税收和补贴策略。
+
+**什么时候需要补贴？** 根据现实生活的经验，当商家定价高于政府预期，政府希望商品价格下降时，通常会通过补贴来降低商家的成本，从而使得商家能够以更低的价格出售商品。
+
+**什么时候需要征税？** 当商家定价低于政府预期，政府希望商品价格上升时，通常会通过征税来增加商家的成本，从而迫使商家提高商品价格。
+
+所以我们首先可以求出当前的最大总利润时的价格，判断是需要补贴还是征税。
+
+在求补贴或税收金额时，可以通过解不等式的方式，但需要较多的数学推导，考虑到计算机的优势，我们可以通过枚举的方式来求解。即：
+
+- 如果需要补贴，逐步增加补贴金额，直至商家选择的最优价格等于政府预期价格
+- 如果需要收税，逐步增加税收金额，直至商家选择的最优价格等于政府预期价格
+
+<Tabs groupId="language" items={['Python', 'C/C++']} persist>
+<Tab value="Python">
+```python
+expect = int(input())
+data = []
+
+# 读取数据直到遇到-1 -1
+while True:
+    price, sales = map(int, input().split())
+    if price == -1 and sales == -1:
+        break
+    data.append([price, sales])
+
+# 对data按价格升序排序
+data.sort()
+
+down = int(input())
+
+# 填充需求曲线的价格间隙，形成一个连续（整数点）的需求曲线
+filled_data = []
+for i in range(len(data)):
+    filled_data.append(data[i])
+    if i > 0 and data[i][0] - data[i-1][0] > 1:
+        price_diff = data[i][0] - data[i-1][0]
+        sales_diff = data[i-1][1] - data[i][1]
+        step = sales_diff // price_diff
+        
+        for j in range(1, price_diff):
+            new_price = data[i-1][0] + j
+            new_sales = data[i-1][1] - step * j
+            filled_data.append([new_price, new_sales])
+
+# 处理超过最高价格的情况
+current_price = filled_data[-1][0]
+current_sales = filled_data[-1][1]
+
+while current_sales > down:
+    current_price += 1
+    current_sales -= down
+    # 继续填充数据直到需求曲线销量降为0
+    if current_sales > 0:
+        filled_data.append([current_price, current_sales])
+
+cost_price = filled_data[0][0]
+
+flag = False
+# 检查补贴和税收 认为amount在0到10000之间 （如果超出证明无解）
+for amount in range(10001):
+    # 补贴情况
+    max_profit = -float('inf')
+    best_price = 0
+    for price, sales in filled_data:
+        profit = (price - cost_price + amount) * sales
+        if profit > max_profit:
+            max_profit = profit
+            best_price = price
+    if best_price == expect:
+        print(amount)
+        flag = True
+        break
+    
+    # 税收情况
+    max_profit = -float('inf')
+    best_price = 0
+    for price, sales in filled_data:
+        profit = (price - cost_price - amount) * sales
+        if profit > max_profit:
+            max_profit = profit
+            best_price = price
+    if best_price == expect:
+        print(-amount)
+        flag = True
+        break
+if not flag:
+    print("NO SOLUTION")
+```
+</Tab>
+<Tab value="C/C++">
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int main() {
+    int expect;
+    cin >> expect;
+    
+    vector<vector<int>> data;
+    
+    // 读取数据直到遇到-1 -1
+    while (true) {
+        int price, sales;
+        cin >> price >> sales;
+        if (price == -1 && sales == -1) {
+            break;
+        }
+        data.push_back({price, sales});
+    }
+    
+    // 对data按价格升序排序
+    sort(data.begin(), data.end());
+    
+    int down;
+    cin >> down;
+    
+    // 填充需求曲线的价格间隙，形成一个连续（整数点）的需求曲线
+    vector<vector<int>> filled_data;
+    for (int i = 0; i < data.size(); i++) {
+        filled_data.push_back(data[i]);
+        if (i > 0 && data[i][0] - data[i-1][0] > 1) {
+            int price_diff = data[i][0] - data[i-1][0];
+            int sales_diff = data[i-1][1] - data[i][1];
+            int step = sales_diff / price_diff;
+            
+            for (int j = 1; j < price_diff; j++) {
+                int new_price = data[i-1][0] + j;
+                int new_sales = data[i-1][1] - step * j;
+                filled_data.push_back({new_price, new_sales});
+            }
+        }
+    }
+    
+    // 处理超过最高价格的情况
+    int current_price = filled_data.back()[0];
+    int current_sales = filled_data.back()[1];
+    
+    while (current_sales > down) {
+        current_price += 1;
+        current_sales -= down;
+        // 继续填充数据直到需求曲线销量降为0
+        if (current_sales > 0) {
+            filled_data.push_back({current_price, current_sales});
+        }
+    }
+    
+    int cost_price = filled_data[0][0];
+    
+    // 检查补贴和税收 认为amount在0到10000之间 （如果超出证明无解）
+    for (int amount = 0; amount <= 10000; amount++) {
+        // 补贴情况
+        int max_profit = INT_MIN;
+        int best_price = 0;
+        for (auto& item : filled_data) {
+            int price = item[0];
+            int sales = item[1];
+            int profit = (price - cost_price + amount) * sales;
+            if (profit > max_profit) {
+                max_profit = profit;
+                best_price = price;
+            }
+        }
+        if (best_price == expect) {
+            cout << amount << endl;
+            return 0;
+        }
+        
+        // 税收情况
+        max_profit = INT_MIN;
+        best_price = 0;
+        for (auto& item : filled_data) {
+            int price = item[0];
+            int sales = item[1];
+            int profit = (price - cost_price - amount) * sales;
+            if (profit > max_profit) {
+                max_profit = profit;
+                best_price = price;
+            }
+        }
+        if (best_price == expect) {
+            cout << -amount << endl;
+            return 0;
+        }
+    }
+    
+    cout << "NO SOLUTION" << endl;
+    return 0;
+}
+```
+</Tab>
+</Tabs>
