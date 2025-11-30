@@ -1,0 +1,111 @@
+---
+title: "2025-11-30 OJ题解"
+description: "两道练手题目的题解和代码示例"
+---
+
+## 宾果游戏
+
+[题目链接](http://10.129.81.88:8848/problem/21)
+
+注意：字符串输入的处理、输出的格式要求
+
+Bingo的条件包括：五行、五列、两条对角线任意一条全为'Y'即为Bingo
+
+<Tabs items={['简洁写法', '正常写法']} persist>
+  <Tab value="简洁写法">
+  ```python
+  # 输入一个长度为5的字符串列表
+  network = [input() for _ in range(5)]
+  bingo = False
+  # 检查行
+  for row in network:
+      if row == "YYYYY":
+          bingo = True
+  # 检查列
+  for col in range(5):
+      if all(network[row][col] == "Y" for row in range(5)):
+          bingo = True
+  # 检查主对角线
+  if all(network[i][i] == "Y" for i in range(5)):
+      bingo = True
+  # 检查副对角线
+  if all(network[i][4 - i] == "Y" for i in range(5)):
+      bingo = True
+  # 三元表达式
+  print("Bingo" if bingo else "No")
+  ```
+  </Tab>
+  <Tab value="正常写法">
+  ```python
+  network = [input() for _ in range(5)]
+
+  bingo = False
+
+  # 检查行
+  for row in network:
+      if row == "YYYYY":
+          bingo = True
+
+  # 检查列
+  for col in range(5):
+      if network[0][col] == "Y" and network[1][col] == "Y" and network[2][col] == "Y" and network[3][col] == "Y" and network[4][col] == "Y":
+          bingo = True
+
+  # 检查主对角线
+  if network[0][0] == "Y" and network[1][1] == "Y" and network[2][2] == "Y" and network[3][3] == "Y" and network[4][4] == "Y":
+      bingo = True
+  # 检查副对角线
+  if network[0][4] == "Y" and network[1][3] == "Y" and network[2][2] == "Y" and network[3][1] == "Y" and network[4][0] == "Y":
+      bingo = True
+
+  if bingo:
+      print("Bingo")
+  else:
+      print("No")
+  ```
+  </Tab>
+</Tabs>
+
+## 密码学
+
+[题目链接](http://10.129.81.88:8848/problem/22)
+
+观察维吉尼亚密码的图片表格，可以发现每一行都是字母表的循环右移，我们要做的加密过程就是从明文字母所在的行开始，向右移动对应密钥字母个数的位置，得到密文字母。注意在移动的过程中，需要先将字母还原到0-25的数字区间进行计算，偏移后超出26对26取模，最后再转换回字母。
+
+<Tabs items={['简洁写法', '正常写法']} persist>
+  <Tab value="简洁写法">
+  ```python
+  P = input()
+  K = input()
+  K = K * 114514
+  C = []
+  for p,k in zip(P, K):
+      print(chr((ord(p) - ord('A') + ord(k) - ord('A')) % 26 + ord('A')), end='')
+  ```
+  </Tab>
+  <Tab value="正常写法">
+  ```python
+  P = input()
+  K = input()
+
+  # 我不知道可以用K = K * (len(P) // len(K) + 1) 这种方式来扩展密钥字符串
+  # 我想到可以用字符串索引index来对密钥长度取模
+  C = []
+
+  for i in range(len(P)):
+      k = K[i % len(K)]
+      p = P[i]
+      # 密钥相对于A的偏移量
+      offset = ord(k) - ord('A')
+      # 加密
+      c = chr((ord(p) - ord('A') + offset) % 26 + ord('A'))
+      # 为什么明文先减去'A'?
+      # 字母表是26一循环 所以要把字母映射到0-25之间
+      # 我不知道可以print(chr(...), end='') 这种方式直接输出密文
+      C.append(c)
+
+  # 使用''.join()来拼接字符串列表
+  print(''.join(C))
+  ```
+  </Tab>
+</Tabs>
