@@ -1,0 +1,144 @@
+---
+title: 2026-03-16 算法复杂度分析
+description: 第一次课课后练习
+---
+
+<SurveyForm surveyId="20260316">
+
+## 单项选择题
+
+1. 判断下列代码段的大O级别：
+
+```python
+test = 0
+for i in range(n):
+    for j in range(n):
+        for k in range(i):
+            test = test + i * j
+```
+
+<SingleSelect
+  id="q1"
+  options={["A. O(n)", "B. O(n*log(n))", "C. O(n^2)", "D. O(n^3)"]}
+/>
+
+---
+
+2. 判断下列代码段的大O级别：
+
+```python
+test = 0
+for i in range(n):
+    test = test + 1
+for j in range(n):
+    test = test - 1
+for k in range(n):
+    test = test * 1
+```
+
+<SingleSelect
+  id="q2"
+  options={["A. O(n)", "B. O(n^3)", "C. O(n*log(n))", "D. O(n^2)"]}
+/>
+
+---
+
+3. 判断下列代码段的大O级别：
+
+```python
+for i in range(n):
+    for j in range(i):
+        k = 2 + 2
+```
+
+<SingleSelect
+  id="q3"
+  options={["A. O(1)", "B. O(n^3)", "C. O(n)", "D. O(n^2)"]}
+/>
+
+---
+
+4. 判断下列代码段的大O级别：
+
+```python
+def function(n):
+    return 2
+```
+
+<SingleSelect
+  id="q4"
+  options={["A. O(n^2)", "B. O(n)", "C. O(n^3)", "D. O(1)"]}
+/>
+
+---
+
+5. 快速幂算法：
+
+```python
+def pow(x, n):
+   if n==0:
+       return 1
+   elif n==1:
+       return x
+   elif n%2==0:
+       return pow(x*x, n//2)
+   else:
+       return pow(x*x, n//2)*x
+```
+
+问它对于n的大O级别。
+
+<SingleSelect
+  id="q5"
+  options={["A. O(log n)", "B. O(n)", "C. O(1)", "D. O(nlog n)"]}
+/>
+
+---
+
+## 多项选择题
+
+6. 下面的列表操作中哪些是O(1)的？
+
+<MultiSelect
+  id="q6"
+  options={["A. alist.pop()", "B. alist.append(10)", "C. alist.sort()", "D. alist[10:16]"]}
+/>
+
+---
+
+7. 下面的字典操作中哪些是O(1)的？
+
+<MultiSelect
+  id="q7"
+  options={["A. my_dict[''] += 1", "B. '' in my_dict", "C. my_dict[''] == 10", "D. del my_dict['']"]}
+/>
+
+---
+
+8. 三个算法总运算次数：
+
+- A: 96+108n+24n²+12n³
+- B: 16+3n⁴⁸
+- C: 10080+168n+7n²*log(n)
+
+以下表述正确的有：
+
+<MultiSelect
+  id="q8"
+  options={[
+    "A. C算法的时间复杂度最大",
+    "B. A算法和B算法的时间复杂度相同",
+    "C. C算法的时间复杂度最小",
+    "D. B算法比A算法的时间复杂度更大"
+  ]}
+/>
+
+---
+
+<div className="mt-8">
+  <SurveySubmitButton>
+    提交答案
+  </SurveySubmitButton>
+</div>
+
+</SurveyForm>

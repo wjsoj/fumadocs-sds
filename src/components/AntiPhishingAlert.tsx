@@ -128,7 +128,7 @@ export function AntiPhishingAlert() {
         </div>
         
         <div className="text-xs text-center text-gray-400 mt-4 space-y-1">
-          <p>计算概论B小班课文档站 | 身份验证</p>
+          <p>数据结构与算法(B)小班课文档站 | 身份验证</p>
         </div>
       </DialogContent>
     </Dialog>

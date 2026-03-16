@@ -15,14 +15,14 @@ export default function HomePage() {
           {/* Badge */}
           <div className="mb-6 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-white backdrop-blur-sm">
             <Shield className="mr-2 h-4 w-4" />
-            2025秋季 计算概论B小班课
+            2026春季 数据结构与算法(B)小班课
           </div>
           
           {/* Main Heading */}
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Learn Python,  
+            数据结构与算法,
             <span className="ml-4 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-              Embraces AI
+              从理论到实践
             </span>
           </h1>
           
@@ -30,7 +30,7 @@ export default function HomePage() {
           <p className="mb-8 text-xl text-gray-200 sm:text-2xl">
             课程内容+进阶延伸
             <br />
-            Python + ??
+            算法设计与分析
           </p>
           
           {/* CTA Buttons */}

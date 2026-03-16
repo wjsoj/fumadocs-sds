@@ -1,16 +1,11 @@
 import '@/app/global.css';
 import 'katex/dist/katex.css';
-import { RootProvider } from 'fumadocs-ui/provider';
-import { Inter } from 'next/font/google';
+import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Toaster } from "@/components/ui/sonner"
-
-const inter = Inter({
-  subsets: ['latin'],
-});
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider>{children}</RootProvider>
         <Toaster />

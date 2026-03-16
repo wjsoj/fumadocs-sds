@@ -1,6 +1,6 @@
 {
-  "title": "Quiz",
+  "title": "课后练习",
   "root": true,
-  "description": "测验练习及答案解析",
+  "description": "课后练习与测验",
   "icon": "FileQuestionMark"
 }

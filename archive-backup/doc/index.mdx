@@ -1,13 +1,13 @@
 ---
 title: Overview
-description: 课后练习总览
+description: Overview
 ---
 
 import { getPageTreePeers } from 'fumadocs-core/page-tree';
 import { source } from '@/lib/source';
 
 <Cards>
-  {getPageTreePeers(source.pageTree, '/docs/quiz').map((peer) => (
+  {getPageTreePeers(source.pageTree, '/docs/doc').map((peer) => (
     <Card key={peer.url} title={peer.name} href={peer.url}>
       {peer.description}
     </Card>
