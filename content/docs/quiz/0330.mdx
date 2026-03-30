@@ -1,0 +1,257 @@
+---
+title: 2026-03-30 基本数据结构 - 栈、队列与列表
+description: 第二次课课后练习
+---
+
+<SurveyForm surveyId="20260330">
+
+## 单项选择题
+
+1. 设有三个元素 X，Y，Z 顺序进栈（进的过程中允许出栈），下列得不到的出栈排列是（ ）。
+
+<SingleSelect
+  id="q1"
+  options={["A. XYZ", "B. YZX", "C. ZXY", "D. ZYX"]}
+/>
+
+---
+
+2. 链表不具有的特点是（ ）。
+
+<SingleSelect
+  id="q2"
+  options={[
+    "A. 可随机访问任意元素",
+    "B. 插入和删除不需要移动元素",
+    "C. 不必事先估计存储空间",
+    "D. 所需空间与线性表长度成正比"
+  ]}
+/>
+
+---
+
+3. 判定一个无序表 Q（链表实现）为空的条件是（ ）。
+
+<SingleSelect
+  id="q3"
+  options={["A. Q.head == None", "B. Q == None", "C. Q.head == 0", "D. Q.head != None"]}
+/>
+
+---
+
+4. 有 n² 个整数，找到其中最小整数需要比较次数至少为（ ）次。
+
+<SingleSelect
+  id="q4"
+  options={["A. n", "B. log₂n", "C. n²-1", "D. n-1"]}
+/>
+
+---
+
+5. 允许表达式内多种括号混合嵌套，检查表达式中括号是否正确配对的算法，通常选用（ ）。
+
+<SingleSelect
+  id="q5"
+  options={["A. 栈", "B. 线性表", "C. 队列", "D. 二叉排序树"]}
+/>
+
+---
+
+6. 双向链表中的每个结点有两个引用域，prev 和 next，分别引用当前结点的前驱与后继，设 p 引用链表中的一个结点，q 引用一待插入结点，现要求在 p 前插入 q，则正确的插入操作为（ ）。
+
+<SingleSelect
+  id="q6"
+  options={[
+    "A. p.prev=q; q.next=p; p.prev.next=q; q.prev=p.prev;",
+    "B. q.prev=p.prev; p.prev.next=q; q.next=p; p.prev=q.next;",
+    "C. q.next=p; p.next=q; p.prev.next=q; q.next=p;",
+    "D. p.prev.next=q; q.next=p; q.prev=p.prev; p.prev=q;"
+  ]}
+/>
+
+---
+
+7. 给定一个 N 个相异元素构成的有序数列，设计一个递归算法实现数列的二分查找，考察递归过程中栈的使用情况，请问这样一个递归调用栈的最小容量应为（ ）。
+
+<SingleSelect
+  id="q7"
+  options={[
+    "A. ⌈N⌉",
+    "B. ⌈N/2⌉",
+    "C. ⌈log₂N⌉",
+    "D. ⌈log₂(N+1)⌉"
+  ]}
+/>
+
+---
+
+8. 数据结构有三个基本要素:逻辑结构、存储结构以及基于结构定义的行为(运算)。下列概念中（ ）属于存储结构。
+
+<SingleSelect
+  id="q8"
+  options={["A. 线性表", "B. 链表", "C. 字符串", "D. 二叉树"]}
+/>
+
+---
+
+9. 为了实现一个循环队列（或称环形队列），采用数组 Q[0..m-1]作为存储结构,其中变量 rear 表示这个循环队列中队尾元素的实际位置，添加结点时按 rear=(rear+1) % m 进行指针移动，变量 length 表示当前队列中的元素个数，请问这个循环队列的队列首位元素的实际位置是（ ）。
+
+<SingleSelect
+  id="q9"
+  options={[
+    "A. rear-length",
+    "B. (1+rear+m-length) % m",
+    "C. (rear-length+m) % m",
+    "D. m-length"
+  ]}
+/>
+
+
+10. 下列不影响算法时间复杂性的因素有（ ）。
+
+<MultiSelect
+  id="q10"
+  options={["A. 问题的规模", "B. 输入值", "C. 计算结果", "D. 算法的策略"]}
+/>
+
+---
+
+## 判断题
+
+11. 队列是动态集合，其定义的出队列操作所移除的元素总是在集合中存在时间最长的元素。
+
+<SingleSelect
+  id="q11"
+  options={["A. 正确", "B. 错误"]}
+/>
+
+---
+
+12. 考虑一个长度为 n 的顺序表中各个位置插入新元素的概率是相同的，则顺序表的插入算法平均时间复杂度为 O(n)。
+
+<SingleSelect
+  id="q12"
+  options={["A. 正确", "B. 错误"]}
+/>
+
+---
+
+13. 分治算法通常将原问题分解为几个规模较小但类似于原问题的子问题，并要求算法实现写成某种递归形式，递归地求解这些子问题，然后再合并这些子问题的解来建立原问题的解。
+
+<SingleSelect
+  id="q13"
+  options={["A. 正确", "B. 错误"]}
+/>
+
+---
+
+14. 考察某个具体问题是否适合应用动态规划算法，必须判定它是否具有最优子结构性质。
+
+<SingleSelect
+  id="q14"
+  options={["A. 正确", "B. 错误"]}
+/>
+
+---
+
+## 填空题
+
+15. 线性表的顺序存储与链式存储是两种常见存储形式；当表元素有序排序进行二分检索时，应采用_________存储形式。
+
+<TextInput id="q15" />
+
+---
+
+16. 设环形队列的容量为 20（单元编号从 0 到 19），现经过一系列的入队和出队运算后，队头变量（第一个元素的位置）front=18，队尾变量（待插入元素的位置）rear=11，在这种情况下，环形队列中有_________个元素。
+
+<TextInput id="q16" />
+
+---
+
+17. 目标串长是 n，模式串长是 m，朴素模式匹配算法思想为：从目标串第一个字符开始，依次与模式串字符匹配；若匹配失败，则尝试匹配的目标串起始字符位置往后移一位，重新开始依次和模式串字符匹配；……. ；直到匹配成功或遍历完整个目标串为止。则该算法中字符的最多比较次数是_________（使用大 O 表示法）。
+
+<TextInput id="q17" />
+
+---
+
+18. 对长度为 3 的顺序表进行查找，若查找第一个元素的概率为 1/2，查找第二个元素的概率为 1/4，查找第三个元素的概率为 1/8，则执行任意查找需要比较元素的平均个数为_________。
+
+<TextInput id="q18" />
+
+---
+
+19. 删除长度为 n 的顺序表的第 i 个数据元素需要移动表中的_________个数据元素。（1\<\=i\<\=n）
+
+<TextInput id="q19" />
+
+---
+
+20. 若栈 S1 中保存整数，栈 S2 中保存运算符，函数 F（）依次执行下述各步操作：
+①从 S1 中依次弹出两个操作数 a 和 b(先弹出 a，再弹出 b)；
+②从 S2 中弹出一个运算符 op;
+③执行相应的运算 b op a;
+④将运算结果压入 S1 中。
+假定 S1 中的操作数依次是 5，8，3，2（2 在栈顶），S2 中的运算符依次是*，-，/（/在栈顶）。调用三次 F（）后，S1 栈顶保存的值是_________。
+
+<TextInput id="q20" />
+
+---
+
+## 算法填空题
+
+21. 读入一个整数序列，用单链表存储之，然后将该单链表颠倒后输出该单链表内容。
+
+```python
+class Node:
+    def __init__(self, data, next=None):
+        self.data, self.next = data, next
+
+class LinkList:
+    def __init__(self, lst):
+        self.head = Node(lst[0])
+        p = self.head
+        for i in lst[1:]:
+            node = Node(i)
+            p.next = _____①_________      # (1 分)
+            p = _____②_________           # (2 分)
+
+    def reverse(self):
+        p = self.head.next
+        self.head.next = __③__           # (2 分)
+        while p is not None:
+            q = p
+            p = ______④________           # (1 分)
+            q.next = ______⑤________      # (2 分)
+            ______⑥________               # (2 分)
+
+    def print(self):
+        p = self.head
+        while p:
+            print(p.data, end=" ")
+            p = p.next
+        print()
+
+a = list(map(int, input().split()))
+a = LinkList(a)
+a.reverse()
+a.print()
+```
+
+请填写下列空：① _________  ② _________  ③ _________  ④ _________  ⑤ _________  ⑥ _________
+
+<TextInput id="q21.1" placeholder="第一小问" />
+<TextInput id="q21.2" placeholder="第二小问" />
+<TextInput id="q21.3" placeholder="第三小问" />
+<TextInput id="q21.4" placeholder="第四小问" />
+<TextInput id="q21.5" placeholder="第五小问" />
+<TextInput id="q21.6" placeholder="第六小问" />
+
+---
+
+<div className="mt-8">
+  <SurveySubmitButton>
+    提交答案
+  </SurveySubmitButton>
+</div>
+
+</SurveyForm>
