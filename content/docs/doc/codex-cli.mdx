@@ -237,28 +237,48 @@ Codex 需要两样东西才能工作：
 
 <Tab value="Windows">
 
-**方法 A：用命令行创建（推荐，最省事）**
+**方法 A：用命令行一键创建（推荐，最省事）**
 
-打开 **PowerShell**，逐行复制运行：
+打开 **PowerShell**，把下面整段**原样复制**进去运行（先把 `sk-xxx` 换成发给你的真实令牌）。
+
+<Callout type="warn">
+下面用到了 PowerShell 的「here-string」语法：开头的 <strong>{`@'`}</strong> 和结尾的 <strong>{`'@`}</strong> 必须**各自单独成行、且顶格不能有空格**，否则会报错。直接整段复制粘贴即可，不要手动加缩进。
+</Callout>
 
 ```powershell
 # 1. 创建 .codex 文件夹
-mkdir "$HOME\.codex" -Force
+New-Item -ItemType Directory -Path "$HOME\.codex" -Force
 
-# 2. 用记事本打开 auth.json
-notepad "$HOME\.codex\auth.json"
+# 2. 写入 auth.json（把 sk-xxx 换成你的真实令牌）
+@'
+{"OPENAI_API_KEY":"sk-xxx"}
+'@ | Set-Content -Path "$HOME\.codex\auth.json" -Encoding utf8
 
-# 3. 用记事本打开 config.toml 准备粘贴内容
-notepad "$HOME\.codex\config.toml"
+# 3. 写入 config.toml
+@'
+model_provider = "api111"
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+disable_response_storage = true
+preferred_auth_method = "apikey"
+
+[model_providers.api111]
+name = "api111"
+base_url = "https://openai.phybench.cn/v1"
+wire_api = "responses"
+'@ | Set-Content -Path "$HOME\.codex\config.toml" -Encoding utf8
 ```
 
-对于`auth.json`，把下面这段**原样粘贴进去**，把 `sk-xxx` 换成你的真实令牌，然后保存：
+运行完这三段，两个文件就都建好并写好内容了，不需要再手动打开编辑。
+
+**方法 B：手动创建文件**
+
+进入 `C:\Users\你的用户名\.codex` 目录（看不到这个文件夹时，先在文件资源管理器「查看」里勾选**显示隐藏的项目**），
+手动新建 `auth.json` 和 `config.toml` 两个文件，分别填入下面的内容：
 
 ```json
 {"OPENAI_API_KEY": "sk-xxx"}
 ```
-
-对于`config.toml`，把下面这段**原样粘贴进去**，然后保存：
 
 ```toml
 model_provider = "api111"
@@ -272,11 +292,6 @@ name = "api111"
 base_url = "https://openai.phybench.cn/v1"
 wire_api = "responses"
 ```
-
-**方法 B：手动创建文件**
-
-进入 `C:\Users\你的用户名\.codex` 目录（看不到这个文件夹时，先在文件资源管理器「查看」里勾选**显示隐藏的项目**），
-手动新建 `auth.json` 和 `config.toml` 两个文件，分别填入上面的内容。
 
 </Tab>
 
