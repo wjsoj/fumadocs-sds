@@ -211,14 +211,14 @@ codex --version
 
 ## 第 4 步：准备 API 令牌与接口地址
 
-Codex 需要两样东西才能工作，**这两样都会直接提供给你**（向你的服务提供方索取即可），你不需要自己去任何网站注册：
+Codex 需要两样东西才能工作：
 
-| 名称 | 长什么样 | 作用 |
+| 名称 | 值 | 作用 |
 | --- | --- | --- |
-| **API 令牌（Token）** | `sk-xxxxxxxxxxxxxxxx` | 调用模型的「钥匙」 |
-| **接口地址（Base URL）** | `https://xxxxx/v1` | 告诉 Codex 连到哪台服务器 |
+| **接口地址（Base URL）** | `https://openai.phybench.cn/v1` | 告诉 Codex 连到哪台服务器（已为你配好，下一步配置里直接是它） |
+| **API 令牌（Token）** | `sk-xxxxxxxxxxxxxxxx` | 调用模型的「钥匙」，**会单独提供给你** |
 
-把拿到的**令牌**和**接口地址**记下来，下一步会填进配置文件。
+接口地址是固定的；你只需要拿到属于你自己的**令牌**，下一步填进配置文件即可。
 
 <Callout type="warn">
 `sk-` 开头的令牌等同于密码。**不要截图发群、不要提交到 GitHub、不要告诉别人。**
@@ -263,7 +263,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
+base_url = "https://openai.phybench.cn/v1"
 wire_api = "responses"
 ```
 
@@ -311,7 +311,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
+base_url = "https://openai.phybench.cn/v1"
 wire_api = "responses"
 ```
 
@@ -355,7 +355,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
+base_url = "https://openai.phybench.cn/v1"
 wire_api = "responses"
 ```
 
@@ -365,7 +365,7 @@ wire_api = "responses"
 
 <Callout type="info" title="config.toml 里几个值是什么意思？">
 - `model_reasoning_effort` 可选 `high` / `medium` / `low`，代表模型「思考」的努力程度（越高越仔细但越慢）。
-- `base_url` 是接口地址，**替换成第 4 步拿到的地址**（注意结尾的 `/v1` 要保留）。
+- `base_url` 是接口地址，已填好为 `https://openai.phybench.cn/v1`，**保持不动即可**。
 - `model = "gpt-5-codex"` 是默认使用的模型。
 </Callout>
 
@@ -408,7 +408,7 @@ codex
 ## 常见问题（FAQ）
 
 <Callout type="error" title="运行 codex 报错 / 无法使用？按顺序排查">
-1. **检查令牌和接口地址**：`auth.json` 里的 `sk-xxx` 要换成提供给你的真实令牌；`config.toml` 里的 `base_url` 要换成提供给你的接口地址（结尾 `/v1` 保留），不要多空格、不要漏引号。
+1. **检查令牌**：`auth.json` 里的 `sk-xxx` 必须换成提供给你的真实令牌，不要多空格、不要漏引号；`config.toml` 里的 `base_url` 保持 `https://openai.phybench.cn/v1` 不要改。
 2. **检查是否重启了终端**：改完配置一定要开新窗口。
 3. **检查 Node 版本**：运行 `node -v`，需为 22 及以上；过低请回到第 1 步重装 LTS 版本。
 4. **仍不行**：把令牌、接口地址、额度等信息向你的服务提供方再确认一遍。
