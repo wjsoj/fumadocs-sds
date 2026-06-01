@@ -1,0 +1,424 @@
+---
+title: Codex CLI 配置教程
+description: 从零开始，在 Windows / macOS / Linux 上安装并配置 Codex CLI
+---
+
+import { PartyPopperIcon, TerminalIcon } from 'lucide-react';
+
+## 这篇教程能帮你做什么？
+
+**Codex** 是 OpenAI 推出的命令行编程助手（Coding Agent）。配置好之后，你可以在终端里输入一句话，
+让它帮你读代码、写代码、改 Bug、跑命令。本教程会**手把手**带你完成全部步骤，即使你从没用过命令行也能跟着走通。
+
+<Callout type="info" title="开始之前，先看这 3 句话">
+1. 全程大约需要 **10～20 分钟**，请保持网络畅通。
+2. 下面所有 <strong>灰色代码块</strong> 里的命令，都是「复制 → 粘贴到终端 → 按回车」。
+3. 页面顶部的 <strong>Windows / macOS / Linux</strong> 选项卡会整页联动，**先选好你自己的电脑系统**，然后从上往下照做即可。
+</Callout>
+
+<Callout type="warn" title="名词速查（看不懂时回来对一下）">
+- **终端 / 命令行**：一个让你用「打字」代替「点鼠标」来控制电脑的黑色窗口。Windows 上叫 *PowerShell* 或 *CMD*，macOS / Linux 上叫 *Terminal（终端）*。
+- **Node.js**：一个运行环境，Codex 依赖它才能安装和运行。
+- **npm**：随 Node.js 一起安装的「软件管家」，用来下载 Codex。
+- **API 令牌（sk-xxx）**：相当于一把钥匙，让 Codex 能调用模型。**它等同于密码，不要发给任何人。**
+</Callout>
+
+---
+
+## 第 0 步：确认系统要求
+
+<Tabs groupId="os" persist items={['Windows', 'macOS', 'Linux']}>
+
+<Tab value="Windows">
+
+| 项目 | 要求 |
+| --- | --- |
+| 操作系统 | Windows 10 或 Windows 11 |
+| Node.js | 22 及以上 |
+| npm | 10 及以上 |
+| 网络 | 能正常访问外网 |
+
+> Windows 用户需要**额外先装一个 Git Bash**（下一步会讲），否则部分命令无法运行。
+
+</Tab>
+
+<Tab value="macOS">
+
+| 项目 | 要求 |
+| --- | --- |
+| 操作系统 | macOS 12 或更高版本 |
+| Node.js | 22 及以上 |
+| npm | 10 及以上 |
+| 网络 | 能正常访问外网 |
+
+</Tab>
+
+<Tab value="Linux">
+
+| 项目 | 要求 |
+| --- | --- |
+| 操作系统 | 主流发行版（Ubuntu 20.04+ / Debian 10+ / CentOS 7+ / Arch 等） |
+| Node.js | 22 及以上 |
+| npm | 10 及以上 |
+| 网络 | 能正常访问外网 |
+
+</Tab>
+
+</Tabs>
+
+---
+
+## 第 1 步：安装 Node.js
+
+<Tabs groupId="os" persist items={['Windows', 'macOS', 'Linux']}>
+
+<Tab value="Windows">
+
+#### 1.1 先安装 Git Bash（仅 Windows 需要）
+
+打开 [Git 官方下载页](https://git-scm.com/downloads/win)，点击页面上的 **「Click here to download」** 下载安装包，
+双击运行后 <strong>一路点「Next（下一步）」</strong> 直到完成即可，不需要修改任何选项。
+
+![Git for Windows 官方下载页面](https://img-api.pku3d.com/ota/admin/hMhUeymH.png)
+
+#### 1.2 安装 Node.js
+
+打开 [Node.js 官网](https://nodejs.org/en/download)，下载并安装标有 **LTS** 字样的版本（LTS = 长期支持版，最稳定）。
+下载得到的 `.msi` 安装包同样 <strong>一路点「Next」</strong> 完成安装即可。
+
+![Node.js 官方下载页面](https://img-api.pku3d.com/ota/admin/UHcTwP7M.png)
+
+<Callout type="info">
+安装界面里如果看到 “Add to PATH（添加到环境变量）” 的勾选项，请**保持勾选**，这样命令行才能找到 node 命令。
+</Callout>
+
+</Tab>
+
+<Tab value="macOS">
+
+有两种方式，**任选其一**即可。
+
+**方式一（最简单）：官网下载安装包**
+
+打开 [Node.js 官网](https://nodejs.org/en/download)，下载标有 **LTS** 字样的 `.pkg` 安装包，双击后一路点「继续」完成安装。
+
+![Node.js 官方下载页面](https://img-api.pku3d.com/ota/admin/UHcTwP7M.png)
+
+**方式二（推荐，命令行一步到位）：用 Homebrew**
+
+打开「终端」（在「启动台」搜索 *Terminal* 即可），先安装 Homebrew（如果你电脑里还没有）：
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+再安装 Node.js：
+
+```bash
+brew install node
+```
+
+</Tab>
+
+<Tab value="Linux">
+
+打开终端，根据你的发行版选择对应命令复制执行：
+
+**Ubuntu / Debian**
+
+```bash
+sudo apt update
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+**CentOS / RHEL / Fedora**
+
+```bash
+sudo dnf install nodejs npm   # 较新的系统
+# 如果上面的命令找不到，改用：
+sudo yum install nodejs npm
+```
+
+**Arch Linux**
+
+```bash
+sudo pacman -S nodejs npm
+```
+
+</Tab>
+
+</Tabs>
+
+---
+
+## 第 2 步：安装 Codex
+
+打开你的终端，复制下面的命令并回车：
+
+<Tabs groupId="os" persist items={['Windows', 'macOS', 'Linux']}>
+
+<Tab value="Windows">
+
+在「开始菜单」搜索 **PowerShell** 或 **CMD** 并打开，然后运行：
+
+```bash
+npm install -g @openai/codex
+```
+
+</Tab>
+
+<Tab value="macOS">
+
+在「终端」里运行（如果提示权限不足，在命令前加 `sudo` 再回车，需要输入开机密码）：
+
+```bash
+npm install -g @openai/codex
+```
+
+</Tab>
+
+<Tab value="Linux">
+
+在终端里运行：
+
+```bash
+sudo npm install -g @openai/codex
+```
+
+</Tab>
+
+</Tabs>
+
+<Callout type="info">
+`-g` 表示「全局安装」，装好后任何目录都能用 `codex` 命令。安装过程会拉取一些依赖，**请耐心等待进度跑完**。
+</Callout>
+
+---
+
+## 第 3 步：验证安装是否成功
+
+在终端里运行：
+
+```bash
+codex --version
+```
+
+如果屏幕上打印出一串**版本号**（例如 `codex 0.x.x`），说明安装成功 🎉。
+如果提示「command not found / 不是内部或外部命令」，请**关掉终端重新打开**再试一次；仍然不行就回到第 1、2 步重新检查。
+
+---
+
+## 第 4 步：获取 API 令牌（Auth Token）
+
+Codex 需要一把「钥匙」才能工作。请到中转站申请：
+
+1. 打开 [yunwu.ai](https://yunwu.ai) 并登录。
+2. 进入 **控制台 → API 令牌** 页面。
+3. 点击 **「添加令牌」**。
+4. **令牌分组**：务必选择 **codex 专属分组**（页面里通常显示为 `codex渠道-gpt` 或 `codex专属`）。<br/>⚠️ 选错分组会导致无法使用。
+5. **令牌名称**：随便填，例如 `my-codex`。
+6. **额度**：建议设为 **无限额度**；其他选项保持默认。
+7. 保存后，复制生成的密钥，它形如 `sk-xxxxxxxxxxxxxxxx`。
+
+<Callout type="warn">
+这把 `sk-` 开头的钥匙等同于密码。**不要截图发群、不要提交到 GitHub、不要告诉别人。**
+</Callout>
+
+---
+
+## 第 5 步：写入配置文件
+
+我们要在「用户目录」下创建一个 `.codex` 文件夹，里面放两个文件：
+
+- `auth.json` —— 存放你的密钥
+- `config.toml` —— 告诉 Codex 用哪个模型、连哪个服务器
+
+<Tabs groupId="os" persist items={['Windows', 'macOS', 'Linux']}>
+
+<Tab value="Windows">
+
+**方法 A：用命令行创建（推荐，最省事）**
+
+打开 **PowerShell**，逐行复制运行：
+
+```powershell
+# 1. 创建 .codex 文件夹
+mkdir "$HOME\.codex" -Force
+
+# 2. 写入 auth.json（请先把 sk-xxx 换成你自己的真实密钥！）
+'{"OPENAI_API_KEY": "sk-xxx"}' | Set-Content "$HOME\.codex\auth.json"
+
+# 3. 用记事本打开 config.toml 准备粘贴内容
+notepad "$HOME\.codex\config.toml"
+```
+
+记事本弹出后（提示是否新建文件，点「是」），把下面这段**原样粘贴进去**，然后保存：
+
+```toml
+model_provider = "api111"
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+disable_response_storage = true
+preferred_auth_method = "apikey"
+
+[model_providers.api111]
+name = "api111"
+base_url = "https://yunwu.ai/v1"
+wire_api = "responses"
+```
+
+**方法 B：手动创建文件**
+
+进入 `C:\Users\你的用户名\.codex` 目录（看不到这个文件夹时，先在文件资源管理器「查看」里勾选**显示隐藏的项目**），
+手动新建 `auth.json` 和 `config.toml` 两个文件，分别填入上面的内容。
+
+</Tab>
+
+<Tab value="macOS">
+
+打开「终端」，逐行复制运行：
+
+```bash
+# 1. 创建文件夹和两个空文件
+mkdir -p ~/.codex
+touch ~/.codex/auth.json
+touch ~/.codex/config.toml
+
+# 2. 编辑 auth.json
+open -e ~/.codex/auth.json
+```
+
+在弹出的文本编辑器里粘贴下面内容（**把 sk-xxx 换成你的真实密钥**），保存关闭：
+
+```json
+{"OPENAI_API_KEY": "sk-xxx"}
+```
+
+再编辑 config.toml：
+
+```bash
+open -e ~/.codex/config.toml
+```
+
+粘贴下面内容并保存：
+
+```toml
+model_provider = "api111"
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+disable_response_storage = true
+preferred_auth_method = "apikey"
+
+[model_providers.api111]
+name = "api111"
+base_url = "https://yunwu.ai/v1"
+wire_api = "responses"
+```
+
+</Tab>
+
+<Tab value="Linux">
+
+打开终端，逐行复制运行：
+
+```bash
+# 1. 创建文件夹和两个空文件
+mkdir -p ~/.codex
+touch ~/.codex/auth.json
+touch ~/.codex/config.toml
+
+# 2. 用 vi 编辑 auth.json
+vi ~/.codex/auth.json
+```
+
+进入 vi 后：按一下 **`i`** 进入编辑模式，粘贴下面内容（**把 sk-xxx 换成你的真实密钥**），
+然后按 **`ESC`**，输入 **`:wq`** 再回车保存退出：
+
+```json
+{"OPENAI_API_KEY": "sk-xxx"}
+```
+
+再编辑 config.toml：
+
+```bash
+vi ~/.codex/config.toml
+```
+
+同样按 `i` 进入编辑，粘贴下面内容，按 `ESC` 输入 `:wq` 保存：
+
+```toml
+model_provider = "api111"
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
+disable_response_storage = true
+preferred_auth_method = "apikey"
+
+[model_providers.api111]
+name = "api111"
+base_url = "https://yunwu.ai/v1"
+wire_api = "responses"
+```
+
+</Tab>
+
+</Tabs>
+
+<Callout type="info" title="config.toml 里几个值是什么意思？">
+- `model_reasoning_effort` 可选 `high` / `medium` / `low`，代表模型「思考」的努力程度（越高越仔细但越慢）。
+- `base_url` 是中转站地址，**保持 `https://yunwu.ai/v1` 不要改**。
+- `model = "gpt-5-codex"` 是默认使用的模型。
+</Callout>
+
+---
+
+## 第 6 步：启动 Codex
+
+<Callout type="warn" title="一定要先重启终端！">
+改完配置后，**关闭当前终端窗口、重新打开一个新的**，配置才会生效。
+</Callout>
+
+1. 进入你想让 Codex 帮忙的项目文件夹（把 `your-project-folder` 换成实际路径）：
+
+```bash
+cd your-project-folder
+```
+
+2. 运行：
+
+```bash
+codex
+```
+
+看到 Codex 的交互界面后，直接用中文输入你的需求（例如：「帮我看看这个项目是做什么的」），回车即可开始对话 🎉。
+
+---
+
+## 进阶：在 VS Code 里使用 Codex 插件
+
+如果你更习惯在编辑器里操作，可以装官方插件：
+
+1. 打开 VS Code，点击左侧的 **扩展（Extensions）** 图标。
+2. 搜索 **Codex**（发布者为 *OpenAI*），点击 **Install** 安装。
+3. 安装完成后，Codex 会出现在侧边栏，登录 / 配置后即可在编辑器内对话。
+
+![VS Code 扩展商店中的 Codex 插件](https://img-api.pku3d.com/ota/admin/gHJedzez.png)
+
+---
+
+## 常见问题（FAQ）
+
+<Callout type="error" title="运行 codex 报错 / 无法使用？按顺序排查">
+1. **检查 API Key 分组**：必须选 codex 专属分组（如 `codex渠道-gpt`），额度设为无限额度、不要限制模型。
+2. **检查密钥是否填对**：`auth.json` 里的 `sk-xxx` 必须替换成你真实的密钥，且不要多空格、不要漏引号。
+3. **检查是否重启了终端**：改完配置一定要开新窗口。
+4. **检查 Node 版本**：运行 `node -v`，需为 22 及以上；过低请回到第 1 步重装 LTS 版本。
+</Callout>
+
+**Q：提示 `codex: command not found`？**
+A：多半是没重启终端，或 Node.js 没装好 / 没加入 PATH。重开终端，再依次运行 `node -v`、`npm -v`、`codex --version` 定位是哪一步出了问题。
+
+**Q：`config.toml` 放哪里？**
+A：放在用户目录的 `.codex` 文件夹里。Windows 是 `C:\Users\你的用户名\.codex\`，macOS / Linux 是 `~/.codex/`。
+
+> 更多 Codex 的配置与用法，可参考 [Codex 官方文档](https://developers.openai.com/codex/ide)。
