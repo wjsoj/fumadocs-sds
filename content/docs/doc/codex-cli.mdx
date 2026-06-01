@@ -209,20 +209,19 @@ codex --version
 
 ---
 
-## 第 4 步：获取 API 令牌（Auth Token）
+## 第 4 步：准备 API 令牌与接口地址
 
-Codex 需要一把「钥匙」才能工作。请到中转站申请：
+Codex 需要两样东西才能工作，**这两样都会直接提供给你**（向你的服务提供方索取即可），你不需要自己去任何网站注册：
 
-1. 打开 [yunwu.ai](https://yunwu.ai) 并登录。
-2. 进入 **控制台 → API 令牌** 页面。
-3. 点击 **「添加令牌」**。
-4. **令牌分组**：务必选择 **codex 专属分组**（页面里通常显示为 `codex渠道-gpt` 或 `codex专属`）。<br/>⚠️ 选错分组会导致无法使用。
-5. **令牌名称**：随便填，例如 `my-codex`。
-6. **额度**：建议设为 **无限额度**；其他选项保持默认。
-7. 保存后，复制生成的密钥，它形如 `sk-xxxxxxxxxxxxxxxx`。
+| 名称 | 长什么样 | 作用 |
+| --- | --- | --- |
+| **API 令牌（Token）** | `sk-xxxxxxxxxxxxxxxx` | 调用模型的「钥匙」 |
+| **接口地址（Base URL）** | `https://xxxxx/v1` | 告诉 Codex 连到哪台服务器 |
+
+把拿到的**令牌**和**接口地址**记下来，下一步会填进配置文件。
 
 <Callout type="warn">
-这把 `sk-` 开头的钥匙等同于密码。**不要截图发群、不要提交到 GitHub、不要告诉别人。**
+`sk-` 开头的令牌等同于密码。**不要截图发群、不要提交到 GitHub、不要告诉别人。**
 </Callout>
 
 ---
@@ -264,7 +263,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://yunwu.ai/v1"
+base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
 wire_api = "responses"
 ```
 
@@ -312,7 +311,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://yunwu.ai/v1"
+base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
 wire_api = "responses"
 ```
 
@@ -356,7 +355,7 @@ preferred_auth_method = "apikey"
 
 [model_providers.api111]
 name = "api111"
-base_url = "https://yunwu.ai/v1"
+base_url = "https://你的接口地址/v1"   # ← 换成第 4 步拿到的接口地址
 wire_api = "responses"
 ```
 
@@ -366,7 +365,7 @@ wire_api = "responses"
 
 <Callout type="info" title="config.toml 里几个值是什么意思？">
 - `model_reasoning_effort` 可选 `high` / `medium` / `low`，代表模型「思考」的努力程度（越高越仔细但越慢）。
-- `base_url` 是中转站地址，**保持 `https://yunwu.ai/v1` 不要改**。
+- `base_url` 是接口地址，**替换成第 4 步拿到的地址**（注意结尾的 `/v1` 要保留）。
 - `model = "gpt-5-codex"` 是默认使用的模型。
 </Callout>
 
@@ -409,10 +408,10 @@ codex
 ## 常见问题（FAQ）
 
 <Callout type="error" title="运行 codex 报错 / 无法使用？按顺序排查">
-1. **检查 API Key 分组**：必须选 codex 专属分组（如 `codex渠道-gpt`），额度设为无限额度、不要限制模型。
-2. **检查密钥是否填对**：`auth.json` 里的 `sk-xxx` 必须替换成你真实的密钥，且不要多空格、不要漏引号。
-3. **检查是否重启了终端**：改完配置一定要开新窗口。
-4. **检查 Node 版本**：运行 `node -v`，需为 22 及以上；过低请回到第 1 步重装 LTS 版本。
+1. **检查令牌和接口地址**：`auth.json` 里的 `sk-xxx` 要换成提供给你的真实令牌；`config.toml` 里的 `base_url` 要换成提供给你的接口地址（结尾 `/v1` 保留），不要多空格、不要漏引号。
+2. **检查是否重启了终端**：改完配置一定要开新窗口。
+3. **检查 Node 版本**：运行 `node -v`，需为 22 及以上；过低请回到第 1 步重装 LTS 版本。
+4. **仍不行**：把令牌、接口地址、额度等信息向你的服务提供方再确认一遍。
 </Callout>
 
 **Q：提示 `codex: command not found`？**
